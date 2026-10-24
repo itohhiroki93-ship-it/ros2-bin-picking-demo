@@ -70,9 +70,6 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 <!-- システム構成・アーキテクチャ図 -->
 ![システム構成とアーキテクチャ図](docs/images/system_architecture.png)
 
-> [!TIP]
-> **【画像の追加手順】**
-> ノード構成や通信データフローを表すアーキテクチャ図（推奨ファイル名: `system_architecture.png`）を作成し、`docs/images/` ディレクトリに配置してください。
 
 ---
 
@@ -115,9 +112,6 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 <!-- SAM2pt パイプライン・データフロー図 -->
 ![SAM2pt データ生成・学習パイプライン](docs/images/sam2pt_pipeline.png)
 
-> [!TIP]
-> **【画像の追加手順】**
-> 実画像切り抜きからドメインランダム化合成、YOLOv8学習に至るパイプライン図（推奨ファイル名: `sam2pt_pipeline.png`）を `docs/images/` ディレクトリに配置してください。
 
 ### 主な機能
 - **ワンクリック・セグメンテーション**: WebカメラまたはIntel RealSenseから静止画を撮影し、MobileSAM（Segment Anything Model）を用いてワーク領域を自動抽出（透過PNG出力）。
@@ -133,11 +127,6 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 
 <!-- GUIスクリーンショット配置エリア -->
 ![モデル生成GUIスクリーンショット](docs/images/gui_screenshot.png)
-
-> [!TIP]
-> **【画像の追加手順】**
-> `python3 tools/SAM2pt_ubuntu.py` を実行したGUI画面のキャプチャ（推奨ファイル名: `gui_screenshot.png`）を `docs/images/` ディレクトリに配置してください。
-
 ---
 
 ## 使用技術・ライブラリ
