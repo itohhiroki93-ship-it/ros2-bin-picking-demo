@@ -11,7 +11,19 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 
 ---
 
+## システム全体図
+
+<!-- システム全体図（実機セットアップ・外観写真など） -->
+![システム全体図](docs/images/system_overview.png)
+
+> [!TIP]
+> **【画像の追加手順】**
+> 実機環境の全体写真やシステム概要図（推奨ファイル名: `system_overview.png`）を `docs/images/` ディレクトリに配置してください。配置すると上記に自動で表示されます。
+
+---
+
 ## 目次
+- [システム全体図](#システム全体図)
 - [プロジェクト概要と実機での実証成果](#プロジェクト概要と実機での実証成果)
 - [実機動作デモ動画](#実機動作デモ動画)
 - [システム構成とアーキテクチャ](#システム構成とアーキテクチャ)
@@ -47,8 +59,7 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 
 実機での連続ビンピッキング実験の動画です。
 
-- **デモ動画リンク**: `[動画URLをここに掲載 (YouTube / Google Drive等)]`  
-  *(※ 現在動画URLの準備中です。URL確定後にリンクを設定してください)*
+- **デモ動画リンク**: `https://youtu.be/CnNMiptfTMM`  
 
 ---
 
@@ -56,32 +67,12 @@ ROS 2と深層学習（YOLOv8 / Segment Anything Model）を活用した、多�
 
 システムはROS 2のトピック、サービス、アクション通信を活用して疎結合に設計されており、視覚処理と運動制御が同期して動作します。
 
-```mermaid
-flowchart TD
-    subgraph Sensing ["センシング・視覚認識"]
-        CAM["camera_node<br>(外付けUSBカメラ / 自動検出)"]
-        YOLO["object_detection_node<br>(YOLOv8 セグメンテーション)"]
-        RQT["rqt_image_view<br>(デバッグモニタ)"]
-    end
+<!-- システム構成・アーキテクチャ図 -->
+![システム構成とアーキテクチャ図](docs/images/system_architecture.png)
 
-    subgraph Transformation ["幾何変換・キャリブレーション"]
-        TRANS["coordinate_transformer_node<br>(ArUco + RANSAC ホモグラフィ変換)"]
-    end
-
-    subgraph Manipulation ["ロボット制御・マニピュレーション"]
-        PNP["pick_and_place_node<br>(9段階シーケンス制御)"]
-        DOBOT["Dobot Magician Control System<br>(dobot_bringup)"]
-    end
-
-    CAM -->|"/camera/image_raw [Image]"| YOLO
-    CAM -->|"/camera/image_raw [Image]"| TRANS
-    YOLO -->|"/camera/detected_image [Image]"| RQT
-    YOLO -->|"/detected_object_pixel [Point]"| TRANS
-    TRANS -->|"/target_robot_pose [Point]"| PNP
-    PNP -->|"PTP_action [Action]"| DOBOT
-    PNP -->|"dobot_suction_cup_service [Service]"| DOBOT
-    PNP -.->|"/arm_status [Bool: BUSY/READY]"| YOLO
-```
+> [!TIP]
+> **【画像の追加手順】**
+> ノード構成や通信データフローを表すアーキテクチャ図（推奨ファイル名: `system_architecture.png`）を作成し、`docs/images/` ディレクトリに配置してください。
 
 ---
 
@@ -121,18 +112,12 @@ flowchart TD
 
 `tools/SAM2pt_ubuntu.py` は、実環境での学習データ収集からアノテーション、モデル学習までをGUI上で一貫して行うための独自開発ツールです。
 
-```
-[カメラ撮影 / 実画像] ──> [MobileSAMによる自動切り抜き] ──> [透過PNGピース化]
-                                                                  │
-[背景画像群] ─────────────────────────────────────────────────────┼──> [ドメインランダム化合成]
-                                                                  │      ・回転 / スケール
-                                                                  │      ・HSV変化 / ノイズ / ぼかし
-                                                                  │      ・オクルージョン自動計算
-                                                                  ▼
-                                                      [YOLOポリゴン自動生成]
-                                                                  ▼
-                                                      [YOLOv8-seg 自動学習]
-```
+<!-- SAM2pt パイプライン・データフロー図 -->
+![SAM2pt データ生成・学習パイプライン](docs/images/sam2pt_pipeline.png)
+
+> [!TIP]
+> **【画像の追加手順】**
+> 実画像切り抜きからドメインランダム化合成、YOLOv8学習に至るパイプライン図（推奨ファイル名: `sam2pt_pipeline.png`）を `docs/images/` ディレクトリに配置してください。
 
 ### 主な機能
 - **ワンクリック・セグメンテーション**: WebカメラまたはIntel RealSenseから静止画を撮影し、MobileSAM（Segment Anything Model）を用いてワーク領域を自動抽出（透過PNG出力）。
@@ -149,10 +134,9 @@ flowchart TD
 <!-- GUIスクリーンショット配置エリア -->
 ![モデル生成GUIスクリーンショット](docs/images/gui_screenshot.png)
 
-> **【スクリーンショット画像の追加手順】**
-> 1. 本リポジトリ直下に `docs/images/` フォルダを作成します。
-> 2. `python3 tools/SAM2pt_ubuntu.py` を実行してGUI画面を起動します。
-> 3. 画面キャプチャを撮影し、ファイル名を `gui_screenshot.png` として `docs/images/gui_screenshot.png` に保存してください。
+> [!TIP]
+> **【画像の追加手順】**
+> `python3 tools/SAM2pt_ubuntu.py` を実行したGUI画面のキャプチャ（推奨ファイル名: `gui_screenshot.png`）を `docs/images/` ディレクトリに配置してください。
 
 ---
 
@@ -176,6 +160,12 @@ flowchart TD
 ```plaintext
 ros2-bin-picking-demo/
 ├── README.md                           # 本ドキュメント
+├── docs/
+│   └── images/                         # README掲載用画像フォルダ
+│       ├── system_overview.png         # 【要配置】システム全体図
+│       ├── system_architecture.png     # 【要配置】システム構成・アーキテクチャ図
+│       ├── sam2pt_pipeline.png         # 【要配置】SAM2pt パイプライン図
+│       └── gui_screenshot.png          # 【要配置】SAM2pt GUI画面スクリーンショット
 ├── launch/
 │   └── system.launch.py                # システム全体の一括起動Launchファイル
 ├── dobot_itou01/
